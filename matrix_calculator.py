@@ -63,28 +63,46 @@ class MatrixAddition(QtWidgets.QWidget):
             """)
 
     def add_matrices(self):
-        # Получаем размерности матриц
+        # Считываем размерности матриц
         rows = int(self.row_edit.text())
         cols = int(self.col_edit.text())
 
-        # Создаем виджеты для ввода чисел в матрицы на лету
+        # Создаем виджеты для ввода чисел в матрицы
         self.matrix1_edits = []
-        self.matrix2_edits = []
-        for i in range(rows):
-            row_layout = QtWidgets.QHBoxLayout()
-            for j in range(cols):
-                edit1 = QtWidgets.QLineEdit()
-                edit2 = QtWidgets.QLineEdit()
-                row_layout.addWidget(edit1)
-                row_layout.addWidget(edit2)
-                self.matrix1_edits.append(edit1)
-                self.matrix2_edits.append(edit2)
-            self.layout.addLayout(row_layout)
+        matrix1_label = QtWidgets.QLabel('Матрица 1:')
+        matrix1_layout = QtWidgets.QGridLayout()
+        for row in range(rows):
+            for col in range(cols):
+                edit = QtWidgets.QLineEdit()
+                matrix1_layout.addWidget(edit, row, col)
+                self.matrix1_edits.append(edit)
 
-        # Создаем кнопку для выполнения операции сложения матриц
-        self.result_button = QtWidgets.QPushButton('Сложить')
-        self.result_button.clicked.connect(self.calculate_result)
-        self.layout.addWidget(self.result_button)
+        self.matrix2_edits = []
+        matrix2_label = QtWidgets.QLabel('Матрица 2:')
+        matrix2_layout = QtWidgets.QGridLayout()
+        for row in range(rows):
+            for col in range(cols):
+                edit = QtWidgets.QLineEdit()
+                matrix2_layout.addWidget(edit, row, col)
+                self.matrix2_edits.append(edit)
+
+        # Создаем разделительную линию между матрицами
+        line = QtWidgets.QFrame()
+        line.setFrameShape(QtWidgets.QFrame.HLine)
+        line.setFrameShadow(QtWidgets.QFrame.Sunken)
+
+        # Создаем кнопку для расчета результата
+        calculate_button = QtWidgets.QPushButton('Расчитать')
+        calculate_button.clicked.connect(self.calculate_result)
+
+        # Добавляем виджеты для ввода чисел в матрицы, разделительную линию и кнопку на форму
+        self.layout.addWidget(matrix1_label)
+        self.layout.addLayout(matrix1_layout)
+        self.layout.addWidget(line)
+        self.layout.addWidget(matrix2_label)
+        self.layout.addLayout(matrix2_layout)
+        self.layout.addWidget(calculate_button)
+
 
     def calculate_result(self):
         # Считываем значения из виджетов ввода чисел в матрицы
